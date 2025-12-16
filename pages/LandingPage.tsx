@@ -1,33 +1,68 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button';
 // FIX: Added BookOpenIcon to the import statement to resolve the "Cannot find name 'BookOpenIcon'" error.
 import { BriefcaseIcon, BrainCircuitIcon, CheckSquareIcon, FileTextIcon, SearchIcon, ShieldCheckIcon, SettingsIcon, UserIcon, BookOpenIcon } from '../components/icons/Icon';
 
-const Header: React.FC = () => (
-    <header className="fixed top-0 left-0 right-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-sm z-50">
-        <div className="container mx-auto px-6 py-3 flex justify-between items-center">
-            <Link to="/" className="flex items-center">
-                <BriefcaseIcon className="w-8 h-8 text-blue-600" />
-                <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 ml-2">CareerMatch</h1>
-            </Link>
-            <nav className="hidden md:flex items-center space-x-8">
-                <a href="#features" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors">Features</a>
-                <a href="#how-it-works" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors">How It Works</a>
-                <a href="#pm-scheme" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors">PM Scheme</a>
-            </nav>
-            <div className="flex items-center space-x-2">
-                <Link to="/login">
-                    <Button variant="ghost">Login</Button>
+const Header: React.FC = () => {
+    const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+        e.preventDefault();
+        const element = document.getElementById(targetId);
+        if (element) {
+            const headerOffset = 80;
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+    };
+
+    return (
+        <header className="fixed top-0 left-0 right-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-sm z-50">
+            <div className="container mx-auto px-6 py-3 flex justify-between items-center">
+                <Link to="/" className="flex items-center">
+                    <BriefcaseIcon className="w-8 h-8 text-blue-600" />
+                    <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 ml-2">CareerMatch</h1>
                 </Link>
-                <Link to="/signup">
-                    <Button variant="primary">Sign Up</Button>
-                </Link>
+                <nav className="hidden md:flex items-center space-x-8">
+                    <a 
+                        href="#features" 
+                        onClick={(e) => handleSmoothScroll(e, 'features')}
+                        className="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors cursor-pointer"
+                    >
+                        Features
+                    </a>
+                    <a 
+                        href="#how-it-works" 
+                        onClick={(e) => handleSmoothScroll(e, 'how-it-works')}
+                        className="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors cursor-pointer"
+                    >
+                        How It Works
+                    </a>
+                    <a 
+                        href="#pm-scheme" 
+                        onClick={(e) => handleSmoothScroll(e, 'pm-scheme')}
+                        className="text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors cursor-pointer"
+                    >
+                        PM Scheme
+                    </a>
+                </nav>
+                <div className="flex items-center space-x-2">
+                    <Link to="/login">
+                        <Button variant="ghost">Login</Button>
+                    </Link>
+                    <Link to="/signup">
+                        <Button variant="primary">Sign Up</Button>
+                    </Link>
+                </div>
             </div>
-        </div>
-    </header>
-);
+        </header>
+    );
+};
 
 const FeatureCard: React.FC<{ icon: React.ElementType, title: string, description: string }> = ({ icon: Icon, title, description }) => (
     <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 text-center">
@@ -50,6 +85,30 @@ const Step: React.FC<{ number: string, title: string, description: string }> = (
 );
 
 const LandingPage: React.FC = () => {
+    useEffect(() => {
+        // Enable smooth scrolling behavior for the entire page
+        document.documentElement.style.scrollBehavior = 'smooth';
+        
+        return () => {
+            // Cleanup: remove smooth scroll behavior when component unmounts
+            document.documentElement.style.scrollBehavior = 'auto';
+        };
+    }, []);
+
+    const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+        e.preventDefault();
+        const element = document.getElementById(targetId);
+        if (element) {
+            const headerOffset = 80;
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+    };
     
     return (
         <div className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 font-sans">
@@ -69,11 +128,16 @@ const LandingPage: React.FC = () => {
                                 <Link to="/signup">
                                     <Button size="lg" variant="primary">Get Started</Button>
                                 </Link>
-                                 <a href="#how-it-works"><Button size="lg" variant="outline">Learn More</Button></a>
+                                 <a 
+                                    href="#how-it-works" 
+                                    onClick={(e) => handleSmoothScroll(e, 'how-it-works')}
+                                >
+                                    <Button size="lg" variant="outline">Learn More</Button>
+                                </a>
                             </div>
                         </div>
                         <div className="md:w-1/2 mt-8 md:mt-0 flex justify-center md:justify-end">
-                            <img src="https://images.unsplash.com/photo-1596229569651-a1177bdd63a7?q=80&w=1887&auto=format&fit=crop" alt="Ocean waves" className="rounded-lg shadow-2xl max-w-sm w-full h-auto object-cover" />
+                            <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1887&auto=format&fit=crop" alt="Students collaborating on career development" className="rounded-lg shadow-2xl max-w-sm w-full h-auto object-cover" />
                         </div>
                     </div>
                 </div>
@@ -118,11 +182,13 @@ const LandingPage: React.FC = () => {
                             <h2 className="text-4xl font-bold">Join the Prestigious PM Internship Scheme</h2>
                             <p className="mt-4 text-gray-600 dark:text-gray-400">CareerMatch is the official platform for the State Government's prestigious PM Internship Scheme. This initiative aims to provide final year students with unparalleled opportunities to work within various state-owned organizations, fostering the next generation of leaders and innovators.</p>
                             <div className="mt-6">
-                               <Button variant="primary" size="lg">Apply to PM Scheme</Button>
+                               <Link to="/signup">
+                                   <Button variant="primary" size="lg">Apply to PM Scheme</Button>
+                               </Link>
                             </div>
                         </div>
                         <div className="md:w-1/2">
-                            <img src="https://images.unsplash.com/photo-1599881143896-102551268483?q=80&w=1887&auto=format&fit=crop" alt="Calm sea" className="rounded-lg shadow-lg" />
+                            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1887&auto=format&fit=crop" alt="Team collaboration and professional development" className="rounded-lg shadow-lg" />
                         </div>
                     </div>
                 </div>
